@@ -1,4 +1,4 @@
-# 🚗 Système Intelligent de Détection de Places de Parking
+# Système Intelligent de Détection de Places de Parking
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![MQTT](https://img.shields.io/badge/MQTT-Mosquitto-orange.svg)](https://mosquitto.org/)
@@ -8,7 +8,7 @@ Système IoT basé sur MQTT pour la gestion en temps réel des places de parking
 
 ---
 
-## 📋 Description
+## Description
 
 Ce projet implémente un système complet de détection et de gestion de places de parking utilisant :
 - **Protocole MQTT** pour la communication IoT temps réel
@@ -19,18 +19,18 @@ Ce projet implémente un système complet de détection et de gestion de places 
 
 ---
 
-## 🎯 Objectifs
+## Objectifs
 
-- ✅ Détection temps réel de l'occupation des places
-- ✅ Visualisation interactive via dashboard web
-- ✅ Historisation et analyse des données
-- ✅ Système d'alertes automatiques (seuils 70%, 85%)
-- ✅ Export des statistiques (CSV/Excel)
-- ✅ API REST pour intégration externe
+- Détection temps réel de l'occupation des places
+- Visualisation interactive via dashboard web
+- Historisation et analyse des données
+- Système d'alertes automatiques (seuils 70%, 85%)
+- Export des statistiques (CSV/Excel)
+- API REST pour intégration externe
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌─────────────┐     MQTT      ┌──────────────┐
@@ -54,7 +54,7 @@ Ce projet implémente un système complet de détection et de gestion de places 
 
 ---
 
-## 🛠️ Technologies Utilisées
+## Technologies Utilisées
 
 | Composant | Technologie |
 |-----------|-------------|
@@ -68,7 +68,7 @@ Ce projet implémente un système complet de détection et de gestion de places 
 
 ---
 
-## 📦 Installation
+## Installation
 
 ### Prérequis
 
@@ -79,7 +79,7 @@ Ce projet implémente un système complet de détection et de gestion de places 
 ### Étape 1 : Cloner le repository
 
 ```bash
-git clone https://github.com/VOTRE-USERNAME/parking-iot-system.git
+git clone https://github.com/Elbaouchi/parking-iot-system.git
 cd parking-iot-system
 ```
 
@@ -109,7 +109,7 @@ pip install -r requirements.txt
 
 ---
 
-## 🚀 Démarrage Rapide
+## Démarrage Rapide
 
 ### Terminal 1 : Démarrer le Broker MQTT
 
@@ -146,18 +146,18 @@ Ouvrez `dashboard/index.html` dans votre navigateur web.
 
 ---
 
-## 📊 Fonctionnalités
+## Fonctionnalités
 
 ### Dashboard Web
 
-- 📈 **4 cartes statistiques** temps réel (total, libres, occupées, taux)
-- 📉 **Graphique temps réel** : Évolution sur 30 minutes
-- 🥧 **Graphique zones** : Répartition par zone (A, B, C)
-- 📊 **Tendances horaires** : Moyennes par heure
-- 🗺️ **Carte visuelle** : Plan 2D des 24 places (code couleur)
-- 📜 **Journal d'activité** : 100 derniers événements
-- 🚨 **Alertes automatiques** : Notifications à 70% et 85%
-- 💾 **Export** : CSV et Excel
+- **4 cartes statistiques** temps réel (total, libres, occupées, taux)
+- **Graphique temps réel** : Évolution sur 30 minutes
+- **Graphique zones** : Répartition par zone (A, B, C)
+- **Tendances horaires** : Moyennes par heure
+- **Carte visuelle** : Plan 2D des 24 places (code couleur)
+- **Journal d'activité** : 100 derniers événements
+- **Alertes automatiques** : Notifications à 70% et 85%
+- **Export** : CSV et Excel
 
 ### API REST
 
@@ -174,9 +174,26 @@ Ouvrez `dashboard/index.html` dans votre navigateur web.
 curl http://localhost:5000/api/current
 ```
 
+**Réponse :**
+
+```json
+{
+  "success": true,
+  "timestamp": "2026-01-11T15:30:00",
+  "total": 24,
+  "free": 8,
+  "occupied": 16,
+  "zones": {
+    "Zone_A": {"free": 3, "occupied": 5},
+    "Zone_B": {"free": 2, "occupied": 6},
+    "Zone_C": {"free": 3, "occupied": 5}
+  }
+}
+```
+
 ---
 
-## 📈 Performances Mesurées
+## Performances Mesurées
 
 | Métrique | Valeur |
 |----------|--------|
@@ -189,7 +206,7 @@ curl http://localhost:5000/api/current
 
 ---
 
-## ⚠️ Difficultés Rencontrées et Solutions
+## Difficultés Rencontrées et Solutions
 
 ### 1. Dashboard Node-RED Non Fonctionnel
 
@@ -206,7 +223,7 @@ node-red --verbose
 
 **Problème :** CPU >80%, RAM >4GB, latence >500ms
 
-**Solutions :**
+**Solutions appliquées :**
 - Réduction fréquence simulateur (1s → 2s)
 - Limitation places (50 → 24)
 - Utilisation threads au lieu de processus
@@ -222,7 +239,7 @@ node-red --verbose
 
 ---
 
-## 🔧 Configuration
+## Configuration
 
 ### Topics MQTT
 
@@ -239,7 +256,7 @@ parking/
 
 ---
 
-## 📁 Structure du Projet
+## Structure du Projet
 
 ```
 parking-iot-system/
@@ -248,32 +265,31 @@ parking-iot-system/
 ├── sensors/          # Simulateur Python
 ├── dashboard/        # Interface web
 ├── docs/             # Documentation + Rapport
-├── screenshots/      # Captures d'écran
 └── README.md
 ```
 
 ---
 
-## 🔮 Perspectives d'Évolution
+## Perspectives d'Évolution
 
 ### Court terme
-- [ ] Capteurs physiques (ESP32 + HC-SR04)
-- [ ] Authentification MQTT (TLS/SSL)
-- [ ] Application mobile (PWA)
+- Capteurs physiques (ESP32 + HC-SR04)
+- Authentification MQTT (TLS/SSL)
+- Application mobile (PWA)
 
 ### Moyen terme
-- [ ] Machine Learning pour prédiction
-- [ ] Système de réservation
-- [ ] Intégration GPS/Maps
+- Machine Learning pour prédiction
+- Système de réservation
+- Intégration GPS/Maps
 
 ### Long terme
-- [ ] Infrastructure cloud (AWS IoT Core)
-- [ ] Paiement automatisé
-- [ ] Intégration Smart City
+- Infrastructure cloud (AWS IoT Core)
+- Paiement automatisé
+- Intégration Smart City
 
 ---
 
-## 👨‍💻 Auteur
+## Auteur
 
 **EL BAOUCHI SAAD**  
 Master IDLD - Université Mohammed V de Rabat  
@@ -281,17 +297,13 @@ Encadré par : Pr. Hafssa BENABOUD
 
 ---
 
-## 📄 Documentation
+## Documentation
 
 - [Rapport complet (PDF)](docs/rapport.pdf)
-- [Documentation technique](docs/)
+- [Repository GitHub](https://github.com/Elbaouchi/parking-iot-system)
 
 ---
 
-## 📝 Licence
+## Licence
 
 Projet académique - Master IDLD 2025-2026
-
----
-
-⭐ **Si ce projet vous est utile, n'hésitez pas à lui donner une étoile !**
