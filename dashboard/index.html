@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🅿️ Parking IoT - Dashboard Pro</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Bibliothèques -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <!-- En-tête -->
+    <header>
+        <div class="container">
+            <div class="header-left">
+                <h1>🅿️ Parking IoT Dashboard</h1>
+                <div class="connection-status">
+                    <span id="status-indicator" class="status-dot disconnected"></span>
+                    <span id="status-text">Déconnecté</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-primary" onclick="exportToExcel()">
+                    📥 Exporter Excel
+                </button>
+                <button class="btn btn-secondary" onclick="exportToCSV()">
+                    📄 Exporter CSV
+                </button>
+                <button class="btn btn-success" onclick="refreshData()">
+                    🔄 Actualiser
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="container">
+        
+        <!-- Alertes -->
+        <div id="alert-container"></div>
+
+        <!-- Section Statistiques -->
+        <section class="stats-section">
+            <div class="stat-card">
+                <div class="stat-icon">🅿️</div>
+                <div class="stat-content">
+                    <h3>Total Places</h3>
+                    <p class="stat-value" id="total-places">--</p>
+                    <span class="stat-trend">100%</span>
+                </div>
+            </div>
+
+            <div class="stat-card success">
+                <div class="stat-icon">✅</div>
+                <div class="stat-content">
+                    <h3>Places Libres</h3>
+                    <p class="stat-value" id="free-places">--</p>
+                    <span class="stat-trend" id="free-percentage">--</span>
+                </div>
+            </div>
+
+            <div class="stat-card danger">
+                <div class="stat-icon">🚗</div>
+                <div class="stat-content">
+                    <h3>Places Occupées</h3>
+                    <p class="stat-value" id="occupied-places">--</p>
+                    <span class="stat-trend" id="occupied-percentage">--</span>
+                </div>
+            </div>
+
+            <div class="stat-card info">
+                <div class="stat-icon">📊</div>
+                <div class="stat-content">
+                    <h3>Taux d'Occupation</h3>
+                    <p class="stat-value" id="occupancy-rate">--%</p>
+                    <span class="stat-trend" id="occupancy-status">--</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Graphiques -->
+        <section class="charts-section">
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h2>📈 Évolution en Temps Réel</h2>
+                    <span class="chart-subtitle">Dernières 30 minutes</span>
+                </div>
+                <canvas id="realtimeChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h2>🥧 Répartition par Zone</h2>
+                    <span class="chart-subtitle">État actuel</span>
+                </div>
+                <canvas id="pieChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Graphique horaire -->
+        <section class="chart-full-width">
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h2>📊 Statistiques Horaires</h2>
+                    <span class="chart-subtitle">Taux d'occupation moyen par heure</span>
+                </div>
+                <canvas id="hourlyChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Barre de progression -->
+        <section class="progress-section">
+            <h2>🎯 Occupation Globale</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 0%">
+                    <span class="progress-text"></span>
+                </div>
+            </div>
+            <p class="progress-label" id="progress-label">0% occupé</p>
+        </section>
+
+        <!-- Zones de parking -->
+        <section class="parking-zones">
+            <div class="section-header">
+                <h2>🗺️ État des Places par Zone</h2>
+                <div class="zone-filters">
+                    <button class="filter-btn active" onclick="filterZone('all')">Toutes</button>
+                    <button class="filter-btn" onclick="filterZone('Zone_A')">Zone A</button>
+                    <button class="filter-btn" onclick="filterZone('Zone_B')">Zone B</button>
+                    <button class="filter-btn" onclick="filterZone('Zone_C')">Zone C</button>
+                </div>
+            </div>
+            
+            <!-- Zone A -->
+            <div class="zone-container" data-zone="Zone_A">
+                <div class="zone-header">
+                    <h3 class="zone-title">Zone A</h3>
+                    <span class="zone-stats" id="zone-a-stats">-- / --</span>
+                </div>
+                <div class="parking-grid" id="zone-a"></div>
+            </div>
+
+            <!-- Zone B -->
+            <div class="zone-container" data-zone="Zone_B">
+                <div class="zone-header">
+                    <h3 class="zone-title">Zone B</h3>
+                    <span class="zone-stats" id="zone-b-stats">-- / --</span>
+                </div>
+                <div class="parking-grid" id="zone-b"></div>
+            </div>
+
+            <!-- Zone C -->
+            <div class="zone-container" data-zone="Zone_C">
+                <div class="zone-header">
+                    <h3 class="zone-title">Zone C</h3>
+                    <span class="zone-stats" id="zone-c-stats">-- / --</span>
+                </div>
+                <div class="parking-grid" id="zone-c"></div>
+            </div>
+        </section>
+
+        <!-- Panneau double : Journal + Stats Backend -->
+        <section class="dual-panel">
+            <!-- Journal d'activité -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>📝 Journal d'Activité</h2>
+                    <button class="btn-small" onclick="clearLog()">Effacer</button>
+                </div>
+                <div class="activity-log" id="activity-log">
+                    <p class="log-empty">En attente de données...</p>
+                </div>
+            </div>
+
+            <!-- Statistiques Backend -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>💾 Statistiques Backend</h2>
+                    <span class="status-badge" id="backend-status">●</span>
+                </div>
+                <div class="backend-stats" id="backend-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Événements enregistrés</span>
+                        <span class="stat-number" id="total-events">--</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Dernière sauvegarde</span>
+                        <span class="stat-number" id="last-save">--</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Heures suivies</span>
+                        <span class="stat-number" id="hours-tracked">--</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Pied de page -->
+    <footer>
+        <div class="footer-content">
+            <p>🚀 Système IoT MQTT - Version 2.0</p>
+            <p>Dernière mise à jour: <span id="last-update">--</span></p>
+            <p>Backend API: <span id="api-status">--</span></p>
+        </div>
+    </footer>
+
+    <!-- Script JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>

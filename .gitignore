@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+*.egg-info/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+parking_history.db
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+.node-red/
+
+# Temporary
+temp/
+tmp/
+*.tmp
+```
+
+#### **Fichier 3 : backend/requirements.txt**
+
+Créez `backend/requirements.txt` :
+```
+flask==3.0.0
+flask-cors==4.0.0
+paho-mqtt==1.6.1
+pandas==2.1.4
+```
+
+#### **Fichier 4 : sensors/requirements.txt**
+
+Créez `sensors/requirements.txt` :
+```
+paho-mqtt==1.6.1
